@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Form Latin — Final Exam Review II</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #4A90A4;
+    --dark-gold: #2C6B7A;
+    --cream: #E8F4F8;
+    --parchment: #C8E4EC;
+    --deep: #0A1A20;
+    --brown: #0D2A33;
+    --red: #1A5C6B;
+    --muted: #5A8A99;
+    --correct: #27AE60;
+    --wrong: #C0392B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background-color: var(--deep);
+    color: var(--cream);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at top right, #0D2A33 0%, transparent 55%),
+      radial-gradient(ellipse at bottom left, #0A1A20 0%, transparent 60%);
+  }
+
+  header {
+    text-align: center;
+    padding: 2.5rem 1rem 1.5rem;
+    border-bottom: 2px solid var(--gold);
+    background: linear-gradient(180deg, #0D2A33 0%, transparent 100%);
+    position: relative;
+  }
+  header::before {
+    content: '✦ MEMORIA PRESS · SECOND EDITION ✦';
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 0.6rem;
+  }
+  header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    font-weight: 900;
+    color: var(--gold);
+    text-shadow: 0 2px 12px rgba(74,144,164,0.4);
+    line-height: 1.15;
+  }
+  header h1 span { color: var(--cream); font-weight: 400; }
+  header p { margin-top: 0.5rem; font-style: italic; color: var(--parchment); font-size: 1.05rem; opacity: 0.85; }
+  .review-badge {
+    display: inline-block;
+    margin-top: 0.6rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    padding: 0.25rem 0.8rem;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    border-radius: 20px;
+    opacity: 0.8;
+  }
+
+  #progress-bar-wrap { max-width: 700px; margin: 1.2rem auto 0; padding: 0 1rem; }
+  #progress-label { display: flex; justify-content: space-between; font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 0.35rem; }
+  #progress-bar { height: 5px; background: rgba(74,144,164,0.2); border-radius: 3px; overflow: hidden; }
+  #progress-fill { height: 100%; background: linear-gradient(90deg, var(--dark-gold), var(--gold)); border-radius: 3px; transition: width 0.5s ease; width: 0%; }
+
+  nav { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; padding: 1.2rem 1rem 0; max-width: 900px; margin: 0 auto; }
+  nav button { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.12em; padding: 0.45rem 0.9rem; border: 1px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; border-radius: 2px; transition: all 0.2s; opacity: 0.7; }
+  nav button:hover { opacity: 1; background: rgba(74,144,164,0.1); }
+  nav button.active { background: var(--gold); color: var(--deep); opacity: 1; font-weight: 700; }
+
+  main { max-width: 800px; margin: 1.5rem auto 3rem; padding: 0 1rem; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-header { text-align: center; margin-bottom: 1.8rem; }
+  .section-header h2 { font-family: 'Cinzel', serif; font-size: 1.4rem; color: var(--gold); font-weight: 700; }
+  .section-header p { font-style: italic; color: var(--muted); font-size: 0.95rem; margin-top: 0.3rem; }
+
+  .quiz-card { background: rgba(13,42,51,0.7); border: 1px solid rgba(74,144,164,0.3); border-radius: 6px; padding: 1.6rem; margin-bottom: 1.2rem; position: relative; }
+  .quiz-card .q-num { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--gold); opacity: 0.6; margin-bottom: 0.4rem; }
+  .quiz-card .question { font-size: 1.15rem; font-weight: 600; color: var(--cream); margin-bottom: 1rem; line-height: 1.4; }
+
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  @media(max-width:480px){ .options { grid-template-columns: 1fr; } }
+
+  .opt-btn { font-family: 'Crimson Pro', serif; font-size: 1rem; padding: 0.7rem 1rem; border: 1px solid rgba(74,144,164,0.35); background: rgba(10,26,32,0.5); color: var(--parchment); cursor: pointer; border-radius: 4px; text-align: left; transition: all 0.15s; line-height: 1.3; }
+  .opt-btn:hover:not(:disabled) { border-color: var(--gold); background: rgba(74,144,164,0.12); }
+  .opt-btn.correct { border-color: var(--correct); background: rgba(39,174,96,0.2); color: #7FFFC4; }
+  .opt-btn.wrong { border-color: var(--wrong); background: rgba(192,57,43,0.2); color: #FFB3A7; }
+  .opt-btn:disabled { cursor: default; }
+
+  .feedback { margin-top: 0.9rem; padding: 0.7rem 1rem; border-radius: 4px; font-size: 0.95rem; display: none; line-height: 1.4; }
+  .feedback.correct-fb { background: rgba(39,174,96,0.15); border-left: 3px solid var(--correct); color: #a8f5c8; display: block; }
+  .feedback.wrong-fb { background: rgba(192,57,43,0.15); border-left: 3px solid var(--wrong); color: #ffb3a7; display: block; }
+
+  .flashcard-wrap { perspective: 1000px; cursor: pointer; margin-bottom: 1.5rem; }
+  .flashcard { position: relative; width: 100%; min-height: 200px; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); border-radius: 8px; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.5rem; text-align: center; border: 1px solid rgba(74,144,164,0.4); }
+  .card-front { background: linear-gradient(135deg, #0D2A33 0%, #0A1A20 100%); }
+  .card-back { background: linear-gradient(135deg, #1A3A1A 0%, #0D200D 100%); transform: rotateY(180deg); border-color: rgba(39,174,96,0.4); }
+  .card-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.25em; color: var(--gold); opacity: 0.6; margin-bottom: 0.8rem; }
+  .card-main { font-size: clamp(1.2rem, 4vw, 1.8rem); font-weight: 600; color: var(--cream); line-height: 1.3; }
+  .card-main.latin-text { font-style: italic; font-size: clamp(1.4rem, 4.5vw, 2rem); color: var(--gold); }
+  .card-hint { margin-top: 0.7rem; font-size: 0.85rem; color: var(--muted); font-style: italic; }
+  .card-back .card-main { color: #A8F5C4; }
+
+  .card-nav { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; margin-bottom: 0.5rem; }
+  .card-nav button { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.1em; padding: 0.55rem 1.2rem; border: 1px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .card-nav button:hover { background: rgba(74,144,164,0.15); }
+  .card-counter { font-family: 'Cinzel', serif; font-size: 0.8rem; color: var(--muted); }
+  .card-hint-text { text-align: center; font-size: 0.8rem; color: var(--muted); font-style: italic; margin-bottom: 1rem; }
+
+  .ref-block { background: rgba(13,42,51,0.6); border: 1px solid rgba(74,144,164,0.25); border-radius: 6px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+  .ref-block h3 { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 0.8rem; border-bottom: 1px solid rgba(74,144,164,0.3); padding-bottom: 0.4rem; }
+
+  .declension-table, .conjugation-table { width: 100%; border-collapse: collapse; margin: 0.5rem 0 1rem; font-size: 0.92rem; }
+  .declension-table th, .conjugation-table th { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.15em; color: var(--gold); padding: 0.5rem 0.7rem; border-bottom: 1px solid rgba(74,144,164,0.4); text-align: left; }
+  .declension-table td, .conjugation-table td { padding: 0.45rem 0.7rem; border-bottom: 1px solid rgba(74,144,164,0.1); color: var(--parchment); font-style: italic; }
+  .declension-table tr:hover td, .conjugation-table tr:hover td { background: rgba(74,144,164,0.05); }
+  .case-label { font-style: normal !important; font-weight: 600; color: var(--muted); font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.1em; }
+  .tense-header td { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.1em; color: var(--gold); background: rgba(74,144,164,0.08); padding: 0.3rem 0.7rem; font-style: normal !important; border-bottom: 1px solid rgba(74,144,164,0.3); }
+
+  .score-banner { text-align: center; padding: 1.2rem; background: rgba(13,42,51,0.9); border: 1px solid var(--gold); border-radius: 6px; margin-bottom: 1.5rem; display: none; }
+  .score-banner.visible { display: block; }
+  .score-banner .score-big { font-family: 'Cinzel', serif; font-size: 2.5rem; font-weight: 900; color: var(--gold); }
+  .score-banner p { color: var(--parchment); margin-top: 0.3rem; font-style: italic; }
+
+  .btn-primary { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.15em; padding: 0.75rem 2rem; background: var(--gold); color: var(--deep); border: none; cursor: pointer; border-radius: 3px; font-weight: 700; transition: all 0.2s; display: block; margin: 1.5rem auto 0; }
+  .btn-primary:hover { background: #5AAABB; transform: translateY(-1px); }
+
+  .divider { text-align: center; color: var(--gold); opacity: 0.4; font-size: 1rem; letter-spacing: 0.5em; margin: 1rem 0; }
+
+  .deck-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .deck-info span { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+  .btn-shuffle { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border: 1px solid rgba(74,144,164,0.4); background: transparent; color: var(--gold); cursor: pointer; border-radius: 2px; opacity: 0.7; transition: opacity 0.2s; }
+  .btn-shuffle:hover { opacity: 1; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width:520px){ .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>First Form Latin <span>·</span> Final Exam Review</h1>
+  <p>Memoria Press · Second Edition</p>
+  <div class="review-badge">REVIEW II — NEW QUESTIONS</div>
+  <div id="progress-bar-wrap">
+    <div id="progress-label">
+      <span>QUIZ PROGRESS</span>
+      <span id="progress-text">0 / 0 answered</span>
+    </div>
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('vocab2')">A · Nouns &amp; Adj.</button>
+  <button onclick="showSection('grammar2')">B · Cases &amp; Syntax</button>
+  <button onclick="showSection('verbs2')">C · Verb Forms</button>
+  <button onclick="showSection('parsing2')">D · Parsing</button>
+  <button onclick="showSection('flashcards2')">E · Flashcards</button>
+  <button onclick="showSection('final2')">F · Final Quiz</button>
+</nav>
+
+<main>
+
+<!-- A · NOUNS & ADJECTIVES -->
+<div id="vocab2" class="section active">
+  <div class="section-header">
+    <h2>A · Nouns &amp; Adjectives</h2>
+    <p>Give the correct Latin dictionary form for each English word.</p>
+  </div>
+  <div id="vocab2-score-banner" class="score-banner">
+    <div class="score-big" id="vocab2-score-text">0/0</div>
+    <p id="vocab2-score-msg"></p>
+  </div>
+  <div id="vocab2-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('vocab2')">↺ Retry</button>
+</div>
+
+<!-- B · CASES & SYNTAX -->
+<div id="grammar2" class="section">
+  <div class="section-header">
+    <h2>B · Cases &amp; Syntax</h2>
+    <p>Identify how Latin cases and grammar rules work.</p>
+  </div>
+  <div id="grammar2-score-banner" class="score-banner">
+    <div class="score-big" id="grammar2-score-text">0/0</div>
+    <p id="grammar2-score-msg"></p>
+  </div>
+  <div id="grammar2-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('grammar2')">↺ Retry</button>
+</div>
+
+<!-- C · VERB FORMS REFERENCE + QUIZ -->
+<div id="verbs2" class="section">
+  <div class="section-header">
+    <h2>C · Verb Forms</h2>
+    <p>Review irregular and 2nd conjugation forms, then test yourself.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="ref-block">
+      <h3>PRINCIPAL PARTS — KEY VERBS</h3>
+      <table class="declension-table">
+        <tr><th>ENGLISH</th><th>PRINCIPAL PARTS</th></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">to see</td><td>vīdeō vidēre vīdī vīsus</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">to hold</td><td>teneō tenēre tenuī tentus</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">to move</td><td>mōveō movēre mōvī motus</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">to order</td><td>jubeō jubēre jussī jussus</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">to teach</td><td>doceō docēre docuī doctus</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">to remain</td><td>maneō manēre mansī mansus</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">to help</td><td>juvō juvāre juvī jutus</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">to be strong</td><td>valeō valēre valuī —</td></tr>
+      </table>
+    </div>
+    <div class="ref-block">
+      <h3>TENSE SIGN REVIEW</h3>
+      <table class="declension-table">
+        <tr><th>TENSE</th><th>SIGN / PATTERN</th></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">Present</td><td>present stem + endings</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">Imperfect</td><td>stem + <strong>bā</strong> + endings</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">Future (1&2)</td><td>stem + <strong>bi/bō</strong> + endings</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">Perfect</td><td>perf. stem + <strong>ī</strong> endings</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">Pluperfect</td><td>perf. stem + <strong>era</strong> + endings</td></tr>
+        <tr><td style="font-style:normal;color:var(--muted)">Fut. Perfect</td><td>perf. stem + <strong>eri</strong> + endings</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="ref-block">
+    <h3>3RD &amp; 4TH CONJUGATION — dūcō / capiō (for reference)</h3>
+    <table class="conjugation-table">
+      <tr><th>PERSON</th><th>PRES. (dūcō)</th><th>IMPERF.</th><th>FUT.</th></tr>
+      <tr><td class="case-label">1S</td><td>dūcō</td><td>dūcēbam</td><td>dūcam</td></tr>
+      <tr><td class="case-label">2S</td><td>dūcis</td><td>dūcēbās</td><td>dūcēs</td></tr>
+      <tr><td class="case-label">3S</td><td>dūcit</td><td>dūcēbat</td><td>dūcet</td></tr>
+      <tr><td class="case-label">1P</td><td>dūcimus</td><td>dūcēbāmus</td><td>dūcēmus</td></tr>
+      <tr><td class="case-label">2P</td><td>dūcitis</td><td>dūcēbātis</td><td>dūcētis</td></tr>
+      <tr><td class="case-label">3P</td><td>dūcunt</td><td>dūcēbant</td><td>dūcent</td></tr>
+    </table>
+  </div>
+
+  <div class="divider">· · · ·</div>
+  <div class="section-header" style="margin-top:1rem;">
+    <h2 style="font-size:1rem;">Verb Forms Quiz</h2>
+  </div>
+  <div id="verbs2-score-banner" class="score-banner">
+    <div class="score-big" id="verbs2-score-text">0/0</div>
+    <p id="verbs2-score-msg"></p>
+  </div>
+  <div id="verbs2-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('verbs2')">↺ Retry</button>
+</div>
+
+<!-- D · PARSING -->
+<div id="parsing2" class="section">
+  <div class="section-header">
+    <h2>D · Parsing Practice</h2>
+    <p>Parse each Latin word — identify its conjugation, person, number, and tense.</p>
+  </div>
+  <div id="parsing2-score-banner" class="score-banner">
+    <div class="score-big" id="parsing2-score-text">0/0</div>
+    <p id="parsing2-score-msg"></p>
+  </div>
+  <div id="parsing2-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('parsing2')">↺ Retry</button>
+</div>
+
+<!-- E · FLASHCARDS -->
+<div id="flashcards2" class="section">
+  <div class="section-header">
+    <h2>E · Vocabulary Flashcards</h2>
+    <p>Tap a card to reveal the answer. Use arrows to navigate.</p>
+  </div>
+  <div class="deck-info">
+    <span id="deck2-label">Latin → English</span>
+    <button class="btn-shuffle" onclick="shuffleCards2()">⇌ Shuffle</button>
+  </div>
+  <p class="card-hint-text">Tap card to flip · Use arrows to navigate</p>
+  <div class="flashcard-wrap" onclick="flipCard2()">
+    <div class="flashcard" id="flashcard2">
+      <div class="card-face card-front">
+        <div class="card-label">LATIN</div>
+        <div class="card-main latin-text" id="card2-front-text">deus -ī</div>
+        <div class="card-hint" id="card2-hint-text">noun · 2nd decl. m.</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-label">ENGLISH</div>
+        <div class="card-main" id="card2-back-text">god</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-nav">
+    <button onclick="prevCard2()">← PREV</button>
+    <span class="card-counter" id="card2-counter">1 / 32</span>
+    <button onclick="nextCard2()">NEXT →</button>
+  </div>
+</div>
+
+<!-- F · FINAL QUIZ -->
+<div id="final2" class="section">
+  <div class="section-header">
+    <h2>F · Final Mixed Quiz II</h2>
+    <p>A fresh comprehensive review — translations, grammar, and Latin sayings.</p>
+  </div>
+  <div id="final2-score-banner" class="score-banner">
+    <div class="score-big" id="final2-score-text">0/0</div>
+    <p id="final2-score-msg"></p>
+  </div>
+  <div id="final2-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('final2')">↺ Retry</button>
+</div>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════════
+//  DATA — all new questions
+// ═══════════════════════════════════════════
+
+const vocab2Questions = [
+  { q:"god", a:"deus -ī m.", opts:["deus -ī m.","dominus -ī m.","dux ducis m.","dies diēī m."] },
+  { q:"friend", a:"amīcus -ī m.", opts:["amīcus -ī m.","amīca -ae f.","frater fratris m.","socius -ī m."] },
+  { q:"food", a:"pēs pedis m. (no — cibus -ī m.)", a:"cibus -ī m.", opts:["cibus -ī m.","pēs pedis m.","pes -ae f.","forum -ī n."] },
+  { q:"house", a:"domus -ūs f.", opts:["domus -ūs f.","domus -ī m.","casa -ae f.","forum -ī n."] },
+  { q:"head", a:"caput capitis n.", opts:["caput capitis n.","corpus corporis n.","manus -ūs f.","oculus -ī m."] },
+  { q:"harbor / port", a:"portus -ūs m.", opts:["portus -ūs m.","porta -ae f.","portō (1)","portum -ī n."] },
+  { q:"sky / heaven", a:"caelum -ī n.", opts:["caelum -ī n.","sol solis m.","luna -ae f.","terra -ae f."] },
+  { q:"slave / servant", a:"servus -ī m.", opts:["servus -ī m.","servō (1)","miles militis m.","dominus -ī m."] },
+  { q:"soldier", a:"miles militis m.", opts:["miles militis m.","servus -ī m.","dominus -ī m.","puer puerī m."] },
+  { q:"kingdom", a:"rēgnum -ī n.", opts:["rēgnum -ī n.","rex regis m.","regia -ae f.","rēs reī f."] },
+  { q:"law", a:"lēx lēgis f.", opts:["lēx lēgis f.","lex -ae f.","lēgis -ī m.","lux lucis f."] },
+  { q:"light", a:"lux lucis f.", opts:["lux lucis f.","lēx lēgis f.","luna -ae f.","caelum -ī n."] },
+  { q:"Italy", a:"Italia -ae f.", opts:["Italia -ae f.","Italus -ī m.","Rōma -ae f.","Graecia -ae f."] },
+  { q:"river", a:"flūmen flūminis n.", opts:["flūmen flūminis n.","aqua -ae f.","fons fontis m.","mare maris n."] },
+  { q:"sailor", a:"nauta -ae m.", opts:["nauta -ae m.","navis navis f.","nāvigō (1)","miles militis m."] },
+  { q:"spirit / soul", a:"spiritus -ūs m.", opts:["spiritus -ūs m.","anima -ae f.","mens mentis f.","cor cordis n."] },
+  { q:"war", a:"bellum -ī n.", opts:["bellum -ī n.","pugna -ae f.","proelium -ī n.","bellus -a -um"] },
+  { q:"world / mankind", a:"mundus -ī m.", opts:["mundus -ī m.","orbis orbis m.","terra -ae f.","mundus -a -um"] },
+  { q:"year", a:"annus -ī m.", opts:["annus -ī m.","diēs diēī m.","tempus temporis n.","hora -ae f."] },
+  { q:"queen", a:"rēgīna -ae f.", opts:["rēgīna -ae f.","rex regis m.","domina -ae f.","matrōna -ae f."] },
+  { q:"first (adjective)", a:"prīmus -a -um", opts:["prīmus -a -um","prīmō (adv.)","prior -ius","prīmum (adv.)"] },
+  { q:"great / large (adjective)", a:"magnus -a -um", opts:["magnus -a -um","major majus","grandis -e","multus -a -um"] },
+  { q:"high / deep (adjective)", a:"altus -a -um", opts:["altus -a -um","longus -a -um","latus -a -um","largus -a -um"] },
+  { q:"much / many (adjective)", a:"multus -a -um", opts:["multus -a -um","magnus -a -um","omnis -e","totus -a -um"] },
+  { q:"new (adjective)", a:"novus -a -um", opts:["novus -a -um","nōtus -a -um","recens -entis","nūper (adv.)"] },
+  { q:"small (adjective)", a:"parvus -a -um", opts:["parvus -a -um","brevis -e","minor minus","exiguus -a -um"] },
+  { q:"sacred / holy (adjective)", a:"sanctus -a -um", opts:["sanctus -a -um","sacer sacra sacrum","dīvīnus -a -um","pius -a -um"] },
+  { q:"ten (number)", a:"decem", opts:["decem","novem","undecim","centum"] },
+  { q:"three (number)", a:"trēs tria", opts:["trēs tria","duo duae duo","quattuor","quinque"] },
+  { q:"wide / broad (adjective)", a:"lātus -a -um", opts:["lātus -a -um","altus -a -um","longus -a -um","plēnus -a -um"] },
+];
+
+const grammar2Questions = [
+  { q:"Which Latin case is used to show possession ('of the farmer')?", a:"Genitive", opts:["Genitive","Dative","Ablative","Accusative"] },
+  { q:"Which case is used for the indirect object ('to/for the farmer')?", a:"Dative", opts:["Dative","Accusative","Genitive","Ablative"] },
+  { q:"The ablative case answers what kind of questions?", a:"from, with, by, in", opts:["from, with, by, in","to, for","of, whose","who, what (subject)"] },
+  { q:"In 'Agricola servum videt,' what case is servum?", a:"Accusative (direct object)", opts:["Accusative (direct object)","Nominative (subject)","Dative (ind. object)","Genitive (possession)"] },
+  { q:"In 'Filia agricolae,' what case is agricolae?", a:"Genitive", opts:["Genitive","Dative","Nominative","Ablative"] },
+  { q:"A predicate nominative follows a linking verb and renames the ___.", a:"subject", opts:["subject","direct object","indirect object","adjective"] },
+  { q:"What is the rule for neuter nouns in nominative and accusative?", a:"They are always the same form", opts:["They are always the same form","Nominative ends in -um, accusative in -a","They follow 3rd declension only","They add -s in the plural"] },
+  { q:"Which declension uses the genitive singular ending -ārum?", a:"1st declension", opts:["1st declension","2nd declension","3rd declension","4th declension"] },
+  { q:"Which declension uses the genitive singular ending -ōrum?", a:"2nd declension", opts:["2nd declension","1st declension","3rd declension","5th declension"] },
+  { q:"The 5th declension genitive singular ending is:", a:"-eī", opts:["-eī","-ae","-is","-ūs"] },
+  { q:"A Latin adjective in the 1st/2nd declension that modifies a 3rd declension noun will:", a:"Keep its own 1/2 declension endings", opts:["Keep its own 1/2 declension endings","Change to 3rd declension endings","Always be placed after the noun","Use the neuter form only"] },
+  { q:"'Sorōrēs bonae' — what case and number is this phrase?", a:"Nominative Plural", opts:["Nominative Plural","Genitive Singular","Dative Plural","Accusative Plural"] },
+  { q:"The dative and ablative plural of the 3rd declension share the ending:", a:"-ibus", opts:["-ibus","-is","-ēs","-um"] },
+  { q:"Which form of 'sum' is used as a linking verb in 'Christus frāter est'?", a:"est (3rd S present)", opts:["est (3rd S present)","sunt (3rd P present)","erat (3rd S imperfect)","erit (3rd S future)"] },
+  { q:"A complementary infinitive does NOT have its own ___.", a:"subject", opts:["subject","conjugation","stem","meaning"] },
+];
+
+const verbs2Questions = [
+  { q:"Give the 2nd person singular present of teneō.", a:"tenēs", opts:["tenēs","tenet","tenēmus","tenēbās"] },
+  { q:"Give the 3rd person plural imperfect of vīdeō.", a:"vidēbant", opts:["vidēbant","vident","vidēbunt","vīdērunt"] },
+  { q:"Give the 1st person singular future of doceō.", a:"docēbō", opts:["docēbō","doceō","docēbam","docuī"] },
+  { q:"Give the 3rd person singular perfect of teneō.", a:"tenuīt", opts:["tenuīt","tenuerat","tenet","tenēbit"] },
+  { q:"Give the 1st person plural pluperfect of mōveō.", a:"mōverāmus", opts:["mōverāmus","mōvimus","mōvērunt","mōvēbāmus"] },
+  { q:"Give the 2nd person plural present of jubeō.", a:"jubētis", opts:["jubētis","jubēs","jubent","jubēbātis"] },
+  { q:"Give the 3rd person singular future of sum.", a:"erit", opts:["erit","erat","est","erunt"] },
+  { q:"Give the 1st person plural imperfect of sum.", a:"erāmus", opts:["erāmus","sumus","erimus","erant"] },
+  { q:"Give the 3rd person plural perfect of maneō.", a:"mansērunt", opts:["mansērunt","manent","manēbunt","manserant"] },
+  { q:"Give the 2nd person singular imperfect of valeō.", a:"valēbās", opts:["valēbās","valēs","valēbis","valuīstī"] },
+  { q:"The future perfect tense is formed from:", a:"perfect stem + eri + endings", opts:["perfect stem + eri + endings","perfect stem + era + endings","present stem + bi + endings","present stem + bā + endings"] },
+  { q:"What tense is 'manserant'?", a:"Pluperfect", opts:["Pluperfect","Perfect","Imperfect","Future Perfect"] },
+];
+
+const parsing2Questions = [
+  { q:"Parse: monuerat", a:"2nd conj., 3rd S, pluperfect", opts:["2nd conj., 3rd S, pluperfect","2nd conj., 3rd S, perfect","2nd conj., 1st S, pluperfect","1st conj., 3rd S, pluperfect"] },
+  { q:"Parse: amābitis", a:"1st conj., 2nd P, future", opts:["1st conj., 2nd P, future","1st conj., 2nd P, imperfect","1st conj., 2nd S, future","1st conj., 3rd P, future"] },
+  { q:"Parse: docuimus", a:"2nd conj., 1st P, perfect", opts:["2nd conj., 1st P, perfect","2nd conj., 1st P, pluperfect","2nd conj., 1st S, perfect","1st conj., 1st P, perfect"] },
+  { q:"Parse: monēbimus", a:"2nd conj., 1st P, future", opts:["2nd conj., 1st P, future","2nd conj., 1st P, imperfect","2nd conj., 3rd P, future","2nd conj., 1st S, future"] },
+  { q:"Parse: vīdistis", a:"2nd conj., 2nd P, perfect", opts:["2nd conj., 2nd P, perfect","2nd conj., 2nd P, pluperfect","2nd conj., 3rd P, perfect","2nd conj., 2nd S, perfect"] },
+  { q:"Parse: amāverint", a:"1st conj., 3rd P, future perfect", opts:["1st conj., 3rd P, future perfect","1st conj., 3rd P, perfect","1st conj., 3rd P, pluperfect","1st conj., 3rd S, future perfect"] },
+  { q:"Parse: tenēbat", a:"2nd conj., 3rd S, imperfect", opts:["2nd conj., 3rd S, imperfect","2nd conj., 3rd S, present","2nd conj., 1st S, imperfect","1st conj., 3rd S, imperfect"] },
+  { q:"Parse: erimus", a:"sum, 1st P, future", opts:["sum, 1st P, future","sum, 1st P, imperfect","sum, 1st P, present","sum, 3rd P, future"] },
+  { q:"Parse: jussērunt", a:"2nd conj., 3rd P, perfect", opts:["2nd conj., 3rd P, perfect","2nd conj., 3rd P, pluperfect","2nd conj., 3rd S, perfect","1st conj., 3rd P, perfect"] },
+  { q:"Parse: mōveram", a:"2nd conj., 1st S, pluperfect", opts:["2nd conj., 1st S, pluperfect","2nd conj., 1st S, imperfect","2nd conj., 1st S, perfect","2nd conj., 3rd S, pluperfect"] },
+  { q:"Parse: valēbunt", a:"2nd conj., 3rd P, future", opts:["2nd conj., 3rd P, future","2nd conj., 3rd P, imperfect","2nd conj., 1st P, future","1st conj., 3rd P, future"] },
+  { q:"Parse: docēbāmus", a:"2nd conj., 1st P, imperfect", opts:["2nd conj., 1st P, imperfect","2nd conj., 1st P, future","2nd conj., 3rd P, imperfect","1st conj., 1st P, imperfect"] },
+];
+
+const flashcards2 = [
+  { lat:"deus -ī", hint:"noun · 2nd decl. m.", eng:"god" },
+  { lat:"amīcus -ī", hint:"noun · 2nd decl. m.", eng:"friend" },
+  { lat:"cibus -ī", hint:"noun · 2nd decl. m.", eng:"food" },
+  { lat:"domus -ūs", hint:"noun · 4th decl. f.", eng:"house, home" },
+  { lat:"caput capitis", hint:"noun · 3rd decl. n.", eng:"head" },
+  { lat:"caelum -ī", hint:"noun · 2nd decl. n.", eng:"sky, heaven" },
+  { lat:"miles militis", hint:"noun · 3rd decl. m.", eng:"soldier" },
+  { lat:"rēgnum -ī", hint:"noun · 2nd decl. n.", eng:"kingdom" },
+  { lat:"lēx lēgis", hint:"noun · 3rd decl. f.", eng:"law" },
+  { lat:"lux lucis", hint:"noun · 3rd decl. f.", eng:"light" },
+  { lat:"flūmen flūminis", hint:"noun · 3rd decl. n.", eng:"river" },
+  { lat:"nauta -ae", hint:"noun · 1st decl. m.", eng:"sailor" },
+  { lat:"spiritus -ūs", hint:"noun · 4th decl. m.", eng:"spirit, soul" },
+  { lat:"mundus -ī", hint:"noun · 2nd decl. m.", eng:"world, mankind" },
+  { lat:"annus -ī", hint:"noun · 2nd decl. m.", eng:"year" },
+  { lat:"rēgīna -ae", hint:"noun · 1st decl. f.", eng:"queen" },
+  { lat:"prīmus -a -um", hint:"adjective · 1/2 decl.", eng:"first" },
+  { lat:"altus -a -um", hint:"adjective · 1/2 decl.", eng:"high, deep" },
+  { lat:"parvus -a -um", hint:"adjective · 1/2 decl.", eng:"small" },
+  { lat:"lātus -a -um", hint:"adjective · 1/2 decl.", eng:"wide, broad" },
+  { lat:"teneō tenēre tenuī tentus", hint:"verb · 2nd conj.", eng:"to hold" },
+  { lat:"vīdeō vidēre vīdī vīsus", hint:"verb · 2nd conj.", eng:"to see" },
+  { lat:"mōveō movēre mōvī motus", hint:"verb · 2nd conj.", eng:"to move" },
+  { lat:"doceō docēre docuī doctus", hint:"verb · 2nd conj.", eng:"to teach" },
+  { lat:"jubeō jubēre jussī jussus", hint:"verb · 2nd conj.", eng:"to order, command" },
+  { lat:"maneō manēre mansī mansus", hint:"verb · 2nd conj.", eng:"to remain, stay" },
+  { lat:"valeō valēre valuī —", hint:"verb · 2nd conj.", eng:"to be strong, be well" },
+  { lat:"juvō juvāre juvī jutus", hint:"verb · 1st conj.", eng:"to help" },
+  { lat:"decem", hint:"number (indeclinable)", eng:"ten" },
+  { lat:"trēs tria", hint:"number · 3rd decl.", eng:"three" },
+  { lat:"cras", hint:"adverb", eng:"tomorrow" },
+  { lat:"numquam", hint:"adverb", eng:"never" },
+];
+
+const final2Questions = [
+  { q:"Translate: 'Sorōrēs bonae judicāre numquam amāvērunt.'", a:"The good sisters never have liked to judge.", opts:["The good sisters never have liked to judge.","The good sister never judged.","Good sisters will never like judging.","The sisters were never good judges."] },
+  { q:"What does 'Carpe diem' literally mean?", a:"Seize the day", opts:["Seize the day","Seize the moment","Enjoy life","Gather the days"] },
+  { q:"What declension is 'exercitus -ūs m.'?", a:"4th declension", opts:["4th declension","2nd declension","3rd declension","5th declension"] },
+  { q:"What declension is 'diēs diēī m.'?", a:"5th declension", opts:["5th declension","1st declension","4th declension","3rd declension"] },
+  { q:"The Latin word 'lēx lēgis' belongs to which declension?", a:"3rd declension", opts:["3rd declension","1st declension","2nd declension","5th declension"] },
+  { q:"In 'Agricolae magnam spem habēbunt,' what tense is habēbunt?", a:"Future", opts:["Future","Imperfect","Perfect","Present"] },
+  { q:"What is the nominative plural of 'bellum -ī n.'?", a:"bella", opts:["bella","bellī","bellōs","bellas"] },
+  { q:"What is the genitive singular of 'pater patris m.'?", a:"patris", opts:["patris","patrī","patrem","patre"] },
+  { q:"Which noun is 4th declension?", a:"portus -ūs m.", opts:["portus -ūs m.","servus -ī m.","pater patris m.","rēs reī f."] },
+  { q:"'Veni, vidi, vici' — what tense are all three verbs?", a:"Perfect", opts:["Perfect","Present","Imperfect","Future"] },
+  { q:"The imperfect tense ending for 3rd person plural is:", a:"-bant", opts:["-bant","-bunt","-nt","-bāmus"] },
+  { q:"Which is the correct future form of 'sum' for 'we will be'?", a:"erimus", opts:["erimus","erāmus","sumus","eritis"] },
+  { q:"'Christus nunc frāter aeternus est.' What part of speech is 'aeternus'?", a:"Predicate adjective", opts:["Predicate adjective","Adverb","Direct object","Subject"] },
+  { q:"The pluperfect tense expresses action:", a:"completed before another past action", opts:["completed before another past action","ongoing in the past","happening right now","completed in the future"] },
+  { q:"What are the four principal parts of 'amō'?", a:"amō amāre amāvī amātus", opts:["amō amāre amāvī amātus","amō amāre amāvit amātum","amō amāvī amātus amāre","amō amās amāvī amātus"] },
+];
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+const state2 = {
+  vocab2:    { questions: shuffle([...vocab2Questions]),    answered: 0, correct: 0 },
+  grammar2:  { questions: shuffle([...grammar2Questions]),  answered: 0, correct: 0 },
+  verbs2:    { questions: shuffle([...verbs2Questions]),    answered: 0, correct: 0 },
+  parsing2:  { questions: shuffle([...parsing2Questions]),  answered: 0, correct: 0 },
+  final2:    { questions: shuffle([...final2Questions]),    answered: 0, correct: 0 },
+};
+
+let card2Index = 0;
+let card2Flipped = false;
+let card2Order = [...flashcards2.keys()];
+
+// ═══════════════════════════════════════════
+//  UTILITIES
+// ═══════════════════════════════════════════
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const idx = ['vocab2','grammar2','verbs2','parsing2','flashcards2','final2'].indexOf(id);
+  document.querySelectorAll('nav button')[idx].classList.add('active');
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = Object.values(state2).reduce((s,v) => s + v.questions.length, 0);
+  const answered = Object.values(state2).reduce((s,v) => s + v.answered, 0);
+  const pct = total ? (answered / total * 100).toFixed(0) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = answered + ' / ' + total + ' answered';
+}
+
+function buildQuiz(containerId, questions, stateKey, scoreBannerId, scoreTextId, scoreMsgId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  questions.forEach((q, i) => {
+    const opts = shuffle([...q.opts]);
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.id = stateKey + '-q-' + i;
+    card.innerHTML = `
+      <div class="q-num">QUESTION ${i+1} OF ${questions.length}</div>
+      <div class="question">${q.q}</div>
+      <div class="options">
+        ${opts.map(o => `<button class="opt-btn" onclick="checkAnswer2(this,'${stateKey}',${i},'${q.a.replace(/'/g,"\\'")}','${scoreBannerId}','${scoreTextId}','${scoreMsgId}')">${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="${stateKey}-fb-${i}"></div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function checkAnswer2(btn, stateKey, qIdx, correct, bannerId, scoreTextId, scoreMsgId) {
+  const card = document.getElementById(stateKey + '-q-' + qIdx);
+  if (card.dataset.answered) return;
+  card.dataset.answered = '1';
+  const chosen = btn.textContent;
+  const fb = document.getElementById(stateKey + '-fb-' + qIdx);
+  const allBtns = card.querySelectorAll('.opt-btn');
+  allBtns.forEach(b => { b.disabled = true; if (b.textContent === correct) b.classList.add('correct'); });
+  const s = state2[stateKey];
+  s.answered++;
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✓ Optime! Correct!';
+    fb.className = 'feedback correct-fb';
+    s.correct++;
+  } else {
+    btn.classList.add('wrong');
+    fb.innerHTML = `✗ Not quite. The correct answer is: <strong>${correct}</strong>`;
+    fb.className = 'feedback wrong-fb';
+  }
+  const allCards = document.querySelectorAll('[id^="' + stateKey + '-q-"]');
+  const allDone = [...allCards].every(c => c.dataset.answered);
+  if (allDone) showScore2(bannerId, scoreTextId, scoreMsgId, s.correct, s.questions.length);
+  updateProgress();
+}
+
+function showScore2(bannerId, scoreTextId, scoreMsgId, correct, total) {
+  const pct = Math.round(correct / total * 100);
+  const banner = document.getElementById(bannerId);
+  document.getElementById(scoreTextId).textContent = correct + ' / ' + total;
+  let msg;
+  if (pct >= 90) msg = '🏆 Optime! Excellent work!';
+  else if (pct >= 75) msg = '👍 Bene! Good effort!';
+  else if (pct >= 60) msg = '📖 Keep reviewing — you\'re getting there!';
+  else msg = '💪 More practice needed. Repetitio est māter studiōrum!';
+  document.getElementById(scoreMsgId).textContent = msg + ' (' + pct + '%)';
+  banner.classList.add('visible');
+  banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetSection(section) {
+  const map = {
+    'vocab2':   [vocab2Questions,   'vocab2',   'vocab2-score-banner',   'vocab2-score-text',   'vocab2-score-msg'],
+    'grammar2': [grammar2Questions, 'grammar2', 'grammar2-score-banner', 'grammar2-score-text', 'grammar2-score-msg'],
+    'verbs2':   [verbs2Questions,   'verbs2',   'verbs2-score-banner',   'verbs2-score-text',   'verbs2-score-msg'],
+    'parsing2': [parsing2Questions, 'parsing2', 'parsing2-score-banner', 'parsing2-score-text', 'parsing2-score-msg'],
+    'final2':   [final2Questions,   'final2',   'final2-score-banner',   'final2-score-text',   'final2-score-msg'],
+  };
+  if (!map[section]) return;
+  const [src, key, bid, btxt, bmsg] = map[section];
+  state2[key] = { questions: shuffle([...src]), answered: 0, correct: 0 };
+  buildQuiz(key + '-quiz-container', state2[key].questions, key, bid, btxt, bmsg);
+  document.getElementById(bid).classList.remove('visible');
+  updateProgress();
+}
+
+// ═══════════════════════════════════════════
+//  FLASHCARDS
+// ═══════════════════════════════════════════
+function renderCard2() {
+  const card = flashcards2[card2Order[card2Index]];
+  document.getElementById('card2-front-text').textContent = card.lat;
+  document.getElementById('card2-hint-text').textContent = card.hint;
+  document.getElementById('card2-back-text').textContent = card.eng;
+  document.getElementById('card2-counter').textContent = (card2Index + 1) + ' / ' + card2Order.length;
+  document.getElementById('flashcard2').classList.remove('flipped');
+  card2Flipped = false;
+}
+function flipCard2() {
+  document.getElementById('flashcard2').classList.toggle('flipped');
+  card2Flipped = !card2Flipped;
+}
+function nextCard2() { card2Index = (card2Index + 1) % flashcards2.length; renderCard2(); }
+function prevCard2() { card2Index = (card2Index - 1 + flashcards2.length) % flashcards2.length; renderCard2(); }
+function shuffleCards2() { shuffle(card2Order); card2Index = 0; renderCard2(); }
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+buildQuiz('vocab2-quiz-container',   state2.vocab2.questions,   'vocab2',   'vocab2-score-banner',   'vocab2-score-text',   'vocab2-score-msg');
+buildQuiz('grammar2-quiz-container', state2.grammar2.questions, 'grammar2', 'grammar2-score-banner', 'grammar2-score-text', 'grammar2-score-msg');
+buildQuiz('verbs2-quiz-container',   state2.verbs2.questions,   'verbs2',   'verbs2-score-banner',   'verbs2-score-text',   'verbs2-score-msg');
+buildQuiz('parsing2-quiz-container', state2.parsing2.questions, 'parsing2', 'parsing2-score-banner', 'parsing2-score-text', 'parsing2-score-msg');
+buildQuiz('final2-quiz-container',   state2.final2.questions,   'final2',   'final2-score-banner',   'final2-score-text',   'final2-score-msg');
+renderCard2();
+updateProgress();
+</script>
+</body>
+</html>

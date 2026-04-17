@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Form Latin — Review III · Units I, II & V</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #7B4F9E;
+    --dark-gold: #5A2D82;
+    --cream: #F0EAF8;
+    --parchment: #D8C8EE;
+    --deep: #120820;
+    --brown: #1E0A35;
+    --muted: #8A6AAA;
+    --correct: #27AE60;
+    --wrong: #C0392B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background-color: var(--deep);
+    color: var(--cream);
+    min-height: 100vh;
+    background-image: radial-gradient(ellipse at top left, #1E0A35 0%, transparent 55%), radial-gradient(ellipse at bottom right, #120820 0%, transparent 60%);
+  }
+  header { text-align: center; padding: 2.5rem 1rem 1.5rem; border-bottom: 2px solid var(--gold); background: linear-gradient(180deg, #1E0A35 0%, transparent 100%); }
+  header::before { content: '✦ MEMORIA PRESS · SECOND EDITION ✦'; display: block; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.3em; color: var(--gold); opacity: 0.7; margin-bottom: 0.6rem; }
+  header h1 { font-family: 'Cinzel', serif; font-size: clamp(1.6rem, 5vw, 2.8rem); font-weight: 900; color: var(--gold); text-shadow: 0 2px 12px rgba(123,79,158,0.4); line-height: 1.15; }
+  header h1 span { color: var(--cream); font-weight: 400; }
+  header p { margin-top: 0.4rem; font-style: italic; color: var(--parchment); font-size: 1.05rem; opacity: 0.85; }
+  .review-badge { display: inline-block; margin-top: 0.5rem; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; padding: 0.25rem 0.9rem; border: 1px solid var(--gold); color: var(--gold); border-radius: 20px; opacity: 0.85; }
+
+  #progress-bar-wrap { max-width: 700px; margin: 1.2rem auto 0; padding: 0 1rem; }
+  #progress-label { display: flex; justify-content: space-between; font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 0.35rem; }
+  #progress-bar { height: 5px; background: rgba(123,79,158,0.2); border-radius: 3px; overflow: hidden; }
+  #progress-fill { height: 100%; background: linear-gradient(90deg, var(--dark-gold), var(--gold)); border-radius: 3px; transition: width 0.5s ease; width: 0%; }
+
+  nav { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; padding: 1.2rem 1rem 0; max-width: 900px; margin: 0 auto; }
+  nav button { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.12em; padding: 0.45rem 0.9rem; border: 1px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; border-radius: 2px; transition: all 0.2s; opacity: 0.7; }
+  nav button:hover { opacity: 1; background: rgba(123,79,158,0.1); }
+  nav button.active { background: var(--gold); color: var(--deep); opacity: 1; font-weight: 700; }
+
+  main { max-width: 800px; margin: 1.5rem auto 3rem; padding: 0 1rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-header { text-align: center; margin-bottom: 1.8rem; }
+  .section-header h2 { font-family: 'Cinzel', serif; font-size: 1.4rem; color: var(--gold); font-weight: 700; }
+  .section-header p { font-style: italic; color: var(--muted); font-size: 0.95rem; margin-top: 0.3rem; }
+
+  .quiz-card { background: rgba(30,10,53,0.7); border: 1px solid rgba(123,79,158,0.3); border-radius: 6px; padding: 1.6rem; margin-bottom: 1.2rem; }
+  .quiz-card .q-num { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--gold); opacity: 0.6; margin-bottom: 0.4rem; }
+  .quiz-card .question { font-size: 1.15rem; font-weight: 600; color: var(--cream); margin-bottom: 1rem; line-height: 1.4; }
+
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  @media(max-width:480px){ .options { grid-template-columns: 1fr; } }
+
+  .opt-btn { font-family: 'Crimson Pro', serif; font-size: 1rem; padding: 0.7rem 1rem; border: 1px solid rgba(123,79,158,0.35); background: rgba(18,8,32,0.5); color: var(--parchment); cursor: pointer; border-radius: 4px; text-align: left; transition: all 0.15s; line-height: 1.3; }
+  .opt-btn:hover:not(:disabled) { border-color: var(--gold); background: rgba(123,79,158,0.12); }
+  .opt-btn.correct { border-color: var(--correct); background: rgba(39,174,96,0.2); color: #7FFFC4; }
+  .opt-btn.wrong { border-color: var(--wrong); background: rgba(192,57,43,0.2); color: #FFB3A7; }
+  .opt-btn:disabled { cursor: default; }
+
+  .feedback { margin-top: 0.9rem; padding: 0.7rem 1rem; border-radius: 4px; font-size: 0.95rem; display: none; line-height: 1.4; }
+  .feedback.correct-fb { background: rgba(39,174,96,0.15); border-left: 3px solid var(--correct); color: #a8f5c8; display: block; }
+  .feedback.wrong-fb { background: rgba(192,57,43,0.15); border-left: 3px solid var(--wrong); color: #ffb3a7; display: block; }
+
+  /* flashcard */
+  .flashcard-wrap { perspective: 1000px; cursor: pointer; margin-bottom: 1.5rem; }
+  .flashcard { position: relative; width: 100%; min-height: 200px; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); border-radius: 8px; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.5rem; text-align: center; border: 1px solid rgba(123,79,158,0.4); }
+  .card-front { background: linear-gradient(135deg, #1E0A35 0%, #120820 100%); }
+  .card-back { background: linear-gradient(135deg, #0A2035 0%, #061220 100%); transform: rotateY(180deg); border-color: rgba(74,144,164,0.5); }
+  .card-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.25em; color: var(--gold); opacity: 0.6; margin-bottom: 0.8rem; }
+  .card-main { font-size: clamp(1.2rem, 4vw, 1.8rem); font-weight: 600; color: var(--cream); line-height: 1.3; }
+  .card-main.latin-text { font-style: italic; font-size: clamp(1.3rem, 4vw, 1.9rem); color: var(--gold); }
+  .card-hint { margin-top: 0.7rem; font-size: 0.85rem; color: var(--muted); font-style: italic; }
+  .card-back .card-main { color: #A8D8FF; }
+  .card-nav { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; margin-bottom: 0.5rem; }
+  .card-nav button { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.1em; padding: 0.55rem 1.2rem; border: 1px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .card-nav button:hover { background: rgba(123,79,158,0.15); }
+  .card-counter { font-family: 'Cinzel', serif; font-size: 0.8rem; color: var(--muted); }
+  .card-hint-text { text-align: center; font-size: 0.8rem; color: var(--muted); font-style: italic; margin-bottom: 1rem; }
+
+  /* reference */
+  .ref-block { background: rgba(30,10,53,0.6); border: 1px solid rgba(123,79,158,0.25); border-radius: 6px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+  .ref-block h3 { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 0.8rem; border-bottom: 1px solid rgba(123,79,158,0.3); padding-bottom: 0.4rem; }
+  table.ref-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin-top: 0.3rem; }
+  table.ref-table th { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.12em; color: var(--gold); padding: 0.45rem 0.6rem; border-bottom: 1px solid rgba(123,79,158,0.4); text-align: left; }
+  table.ref-table td { padding: 0.42rem 0.6rem; border-bottom: 1px solid rgba(123,79,158,0.1); color: var(--parchment); font-style: italic; }
+  table.ref-table tr:hover td { background: rgba(123,79,158,0.05); }
+  .lbl { font-style: normal !important; color: var(--muted); font-weight: 600; font-family: 'Cinzel', serif; font-size: 0.68rem; }
+  .th-row td { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--gold); background: rgba(123,79,158,0.1); padding: 0.3rem 0.6rem; font-style: normal !important; border-bottom: 1px solid rgba(123,79,158,0.3); }
+
+  /* sayings block */
+  .saying { padding: 0.65rem 0; border-bottom: 1px solid rgba(123,79,158,0.15); }
+  .saying:last-child { border: none; }
+  .saying .lat { font-style: italic; color: var(--gold); font-size: 1.05rem; }
+  .saying .eng { color: var(--muted); font-size: 0.88rem; margin-top: 0.15rem; }
+
+  .score-banner { text-align: center; padding: 1.2rem; background: rgba(30,10,53,0.9); border: 1px solid var(--gold); border-radius: 6px; margin-bottom: 1.5rem; display: none; }
+  .score-banner.visible { display: block; }
+  .score-banner .score-big { font-family: 'Cinzel', serif; font-size: 2.5rem; font-weight: 900; color: var(--gold); }
+  .score-banner p { color: var(--parchment); margin-top: 0.3rem; font-style: italic; }
+
+  .btn-primary { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.15em; padding: 0.75rem 2rem; background: var(--gold); color: var(--deep); border: none; cursor: pointer; border-radius: 3px; font-weight: 700; transition: all 0.2s; display: block; margin: 1.5rem auto 0; }
+  .btn-primary:hover { background: #9B6FBE; transform: translateY(-1px); }
+
+  .divider { text-align: center; color: var(--gold); opacity: 0.4; font-size: 1rem; letter-spacing: 0.5em; margin: 1.2rem 0; }
+  .deck-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .deck-info span { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+  .btn-shuffle { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border: 1px solid rgba(123,79,158,0.4); background: transparent; color: var(--gold); cursor: pointer; border-radius: 2px; opacity: 0.7; transition: opacity 0.2s; }
+  .btn-shuffle:hover { opacity: 1; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width:520px){ .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>First Form Latin <span>·</span> Review III</h1>
+  <p>Memoria Press · Lessons 33 &amp; 34 · Units I, II &amp; V</p>
+  <div class="review-badge">2ND CONJUGATION · UNIT V VOCAB · SAYINGS</div>
+  <div id="progress-bar-wrap">
+    <div id="progress-label"><span>QUIZ PROGRESS</span><span id="progress-text">0 / 0 answered</span></div>
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('vocabA')">A · Unit V Vocab</button>
+  <button onclick="showSection('sayings')">B · Latin Sayings</button>
+  <button onclick="showSection('grammar3')">C · Grammar</button>
+  <button onclick="showSection('verbForms')">D · Verb Forms</button>
+  <button onclick="showSection('parsing3')">E · Parsing</button>
+  <button onclick="showSection('flashcards3')">F · Flashcards</button>
+  <button onclick="showSection('final3')">G · Final Quiz</button>
+</nav>
+
+<main>
+
+<!-- ══════════ A · UNIT V VOCABULARY ══════════ -->
+<div id="vocabA" class="section active">
+  <div class="section-header">
+    <h2>A · Unit V Vocabulary</h2>
+    <p>Give all principal parts for each verb (Lesson 33 &amp; 34 style).</p>
+  </div>
+  <div id="vocabA-score-banner" class="score-banner">
+    <div class="score-big" id="vocabA-score-text">0/0</div><p id="vocabA-score-msg"></p>
+  </div>
+  <div id="vocabA-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('vocabA')">↺ Retry</button>
+</div>
+
+<!-- ══════════ B · LATIN SAYINGS ══════════ -->
+<div id="sayings" class="section">
+  <div class="section-header">
+    <h2>B · Latin Sayings</h2>
+    <p>Match each Latin saying to its correct English translation.</p>
+  </div>
+
+  <div class="ref-block">
+    <h3>REFERENCE — ALL SAYINGS FROM LESSONS 33 &amp; 34</h3>
+    <div class="saying"><div class="lat">Cave canem.</div><div class="eng">Beware of the dog.</div></div>
+    <div class="saying"><div class="lat">Docēre, delectāre, movēre.</div><div class="eng">To teach, to delight, to move (the emotions). — Cicero</div></div>
+    <div class="saying"><div class="lat">Veni, vidi, vici.</div><div class="eng">I came, I saw, I conquered. — Julius Caesar</div></div>
+    <div class="saying"><div class="lat">Videō et tāceō.</div><div class="eng">I see and am silent. — Queen Elizabeth I</div></div>
+    <div class="saying"><div class="lat">In umbrā, igitur, pugnābimus.</div><div class="eng">Then we will fight in the shade. — Spartan warrior</div></div>
+    <div class="saying"><div class="lat">nunc aut numquam</div><div class="eng">now or never</div></div>
+    <div class="saying"><div class="lat">semper fidēlis</div><div class="eng">always faithful (motto of the U.S. Marines)</div></div>
+  </div>
+
+  <div class="divider">· · · ·</div>
+  <div class="section-header" style="margin-top:1rem;"><h2 style="font-size:1rem;">Sayings Quiz</h2></div>
+  <div id="sayings-score-banner" class="score-banner">
+    <div class="score-big" id="sayings-score-text">0/0</div><p id="sayings-score-msg"></p>
+  </div>
+  <div id="sayings-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('sayings')">↺ Retry</button>
+</div>
+
+<!-- ══════════ C · GRAMMAR ══════════ -->
+<div id="grammar3" class="section">
+  <div class="section-header">
+    <h2>C · Grammar Questions</h2>
+    <p>Key grammar facts from Lessons 33–34 (Units I, II &amp; V).</p>
+  </div>
+
+  <div class="ref-block">
+    <h3>QUICK REFERENCE — 2ND CONJUGATION FACTS</h3>
+    <table class="ref-table">
+      <tr><th>FEATURE</th><th>ANSWER</th></tr>
+      <tr><td class="lbl">Stem vowel</td><td>ē (long e)</td></tr>
+      <tr><td class="lbl">Infinitive ending</td><td>-ēre</td></tr>
+      <tr><td class="lbl">Regular principal parts pattern</td><td>-eō, -ēre, -uī, -itus</td></tr>
+      <tr><td class="lbl">Present stem found from</td><td>2nd principal part minus -re</td></tr>
+      <tr><td class="lbl">Perfect stem found from</td><td>3rd principal part minus -ī</td></tr>
+    </table>
+    <br>
+    <table class="ref-table">
+      <tr><th>VERB ATTRIBUTE</th><th>DEFINITION</th></tr>
+      <tr><td class="lbl">Person</td><td>1st, 2nd, 3rd</td></tr>
+      <tr><td class="lbl">Number</td><td>Singular, Plural</td></tr>
+      <tr><td class="lbl">Tense</td><td>Present, Imperfect, Future, Perfect, Pluperfect, Future Perfect</td></tr>
+      <tr><td class="lbl">Mood</td><td>Indicative, Imperative, Subjunctive</td></tr>
+      <tr><td class="lbl">Voice</td><td>Active, Passive</td></tr>
+      <tr><td class="lbl">Conjugation</td><td>1st, 2nd, 3rd, 4th</td></tr>
+    </table>
+  </div>
+
+  <div class="divider">· · · ·</div>
+  <div id="grammar3-score-banner" class="score-banner">
+    <div class="score-big" id="grammar3-score-text">0/0</div><p id="grammar3-score-msg"></p>
+  </div>
+  <div id="grammar3-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('grammar3')">↺ Retry</button>
+</div>
+
+<!-- ══════════ D · VERB FORMS ══════════ -->
+<div id="verbForms" class="section">
+  <div class="section-header">
+    <h2>D · Verb Forms</h2>
+    <p>Give the correct form of hābeō, mōveō, or related 2nd conjugation verbs.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="ref-block">
+      <h3>HĀBEŌ — ALL SIX TENSES (1st S)</h3>
+      <table class="ref-table">
+        <tr><th>TENSE</th><th>1ST S FORM</th></tr>
+        <tr><td class="lbl">Present</td><td>habeō</td></tr>
+        <tr><td class="lbl">Imperfect</td><td>habēbam</td></tr>
+        <tr><td class="lbl">Future</td><td>habēbō</td></tr>
+        <tr><td class="lbl">Perfect</td><td>habuī</td></tr>
+        <tr><td class="lbl">Pluperfect</td><td>habueram</td></tr>
+        <tr><td class="lbl">Future Perfect</td><td>habuerō</td></tr>
+      </table>
+    </div>
+    <div class="ref-block">
+      <h3>MŌVEŌ — ALL SIX TENSES (1st S)</h3>
+      <table class="ref-table">
+        <tr><th>TENSE</th><th>1ST S FORM</th></tr>
+        <tr><td class="lbl">Present</td><td>mōveō</td></tr>
+        <tr><td class="lbl">Imperfect</td><td>movēbam</td></tr>
+        <tr><td class="lbl">Future</td><td>movēbō</td></tr>
+        <tr><td class="lbl">Perfect</td><td>mōvī</td></tr>
+        <tr><td class="lbl">Pluperfect</td><td>mōveram</td></tr>
+        <tr><td class="lbl">Future Perfect</td><td>mōverō</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="ref-block">
+    <h3>KEY 2ND CONJUGATION PRINCIPAL PARTS</h3>
+    <table class="ref-table">
+      <tr><th>ENGLISH</th><th>PP1</th><th>PP2</th><th>PP3</th><th>PP4</th></tr>
+      <tr><td class="lbl">to have</td><td>habeō</td><td>habēre</td><td>habuī</td><td>habitus</td></tr>
+      <tr><td class="lbl">to move</td><td>mōveō</td><td>movēre</td><td>mōvī</td><td>motus</td></tr>
+      <tr><td class="lbl">to warn</td><td>moneō</td><td>monēre</td><td>monuī</td><td>monitus</td></tr>
+      <tr><td class="lbl">to remain</td><td>maneō</td><td>manēre</td><td>mānsī</td><td>mānsus</td></tr>
+      <tr><td class="lbl">to hold</td><td>teneō</td><td>tenēre</td><td>tenuī</td><td>tentus</td></tr>
+      <tr><td class="lbl">to frighten</td><td>terreō</td><td>terrēre</td><td>terruī</td><td>territus</td></tr>
+      <tr><td class="lbl">to see</td><td>vīdeō</td><td>vidēre</td><td>vīdī</td><td>vīsus</td></tr>
+      <tr><td class="lbl">to owe/ought</td><td>debeō</td><td>debēre</td><td>debuī</td><td>debitus</td></tr>
+      <tr><td class="lbl">to sit</td><td>sedeō</td><td>sedēre</td><td>sēdī</td><td>sessus</td></tr>
+      <tr><td class="lbl">to rejoice</td><td>gaudeō</td><td>gaudēre</td><td>gāvīsus sum</td><td>—</td></tr>
+      <tr><td class="lbl">to prevent</td><td>prohibeō</td><td>prohibēre</td><td>prohibuī</td><td>prohibitus</td></tr>
+      <tr><td class="lbl">to respond</td><td>respondeō</td><td>respondēre</td><td>respondī</td><td>respōnsus</td></tr>
+      <tr><td class="lbl">to appear</td><td>appāreō</td><td>appārēre</td><td>appāruī</td><td>appāritus</td></tr>
+      <tr><td class="lbl">to be silent</td><td>tāceō</td><td>tacēre</td><td>tacuī</td><td>tacitus</td></tr>
+      <tr><td class="lbl">to burn</td><td>ārdeō</td><td>ārdēre</td><td>ārsī</td><td>ārsus</td></tr>
+      <tr><td class="lbl">to fear</td><td>tīmeō</td><td>timēre</td><td>timuī</td><td>—</td></tr>
+      <tr><td class="lbl">to beware of</td><td>caveō</td><td>cavēre</td><td>cāvī</td><td>cautus</td></tr>
+    </table>
+  </div>
+
+  <div class="divider">· · · ·</div>
+  <div class="section-header" style="margin-top:0.5rem;"><h2 style="font-size:1rem;">Verb Forms Quiz</h2></div>
+  <div id="verbForms-score-banner" class="score-banner">
+    <div class="score-big" id="verbForms-score-text">0/0</div><p id="verbForms-score-msg"></p>
+  </div>
+  <div id="verbForms-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('verbForms')">↺ Retry</button>
+</div>
+
+<!-- ══════════ E · PARSING ══════════ -->
+<div id="parsing3" class="section">
+  <div class="section-header">
+    <h2>E · Parsing Practice</h2>
+    <p>Parse each Latin form — taken directly from Lessons 33 &amp; 34 Form Drills.</p>
+  </div>
+  <div id="parsing3-score-banner" class="score-banner">
+    <div class="score-big" id="parsing3-score-text">0/0</div><p id="parsing3-score-msg"></p>
+  </div>
+  <div id="parsing3-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('parsing3')">↺ Retry</button>
+</div>
+
+<!-- ══════════ F · FLASHCARDS ══════════ -->
+<div id="flashcards3" class="section">
+  <div class="section-header">
+    <h2>F · Vocabulary Flashcards</h2>
+    <p>Tap card to flip · All Unit V verbs + key nouns from Lesson 34.</p>
+  </div>
+  <div class="deck-info">
+    <span id="deck3-label">Latin → English</span>
+    <button class="btn-shuffle" onclick="shuffleCards3()">⇌ Shuffle</button>
+  </div>
+  <p class="card-hint-text">Tap card to flip · Use arrows to navigate</p>
+  <div class="flashcard-wrap" onclick="flipCard3()">
+    <div class="flashcard" id="flashcard3">
+      <div class="card-face card-front">
+        <div class="card-label">LATIN</div>
+        <div class="card-main latin-text" id="card3-front-text">habeō habēre habuī habitus</div>
+        <div class="card-hint" id="card3-hint-text">verb · 2nd conj.</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-label">ENGLISH</div>
+        <div class="card-main" id="card3-back-text">to have, hold</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-nav">
+    <button onclick="prevCard3()">← PREV</button>
+    <span class="card-counter" id="card3-counter">1 / 35</span>
+    <button onclick="nextCard3()">NEXT →</button>
+  </div>
+</div>
+
+<!-- ══════════ G · FINAL QUIZ ══════════ -->
+<div id="final3" class="section">
+  <div class="section-header">
+    <h2>G · Final Mixed Quiz III</h2>
+    <p>Comprehensive review of Units I, II &amp; V — vocabulary, grammar, translation, and sayings.</p>
+  </div>
+  <div id="final3-score-banner" class="score-banner">
+    <div class="score-big" id="final3-score-text">0/0</div><p id="final3-score-msg"></p>
+  </div>
+  <div id="final3-quiz-container"></div>
+  <button class="btn-primary" onclick="resetSection('final3')">↺ Retry</button>
+</div>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════
+
+const vocabAQuestions = [
+  { q:"to appear", a:"appāreō appārēre appāruī appāritus", opts:["appāreō appārēre appāruī appāritus","appāreō appārāre appārvī appāratus","appāreō appārēre appārī appārītus","pareō parēre paruī paritus"] },
+  { q:"to be silent", a:"tāceō tacēre tacuī tacitus", opts:["tāceō tacēre tacuī tacitus","tāceō tacāre tacuī tacitus","sileō silēre siluī —","tāceō tacēre tācī tācitus"] },
+  { q:"to be strong / be well", a:"valeō valēre valuī —", opts:["valeō valēre valuī —","valeō valāre valuī valitus","valeō valēre valvī valitus","beneō benēre benuī —"] },
+  { q:"to beware of / guard against", a:"caveō cavēre cāvī cautus", opts:["caveō cavēre cāvī cautus","caveō cavāre cavuī cavitus","caveō cavēre cavī cavitus","gaurdeō guardēre guardī guardus"] },
+  { q:"to burn / be on fire", a:"ārdeō ārdēre ārsī ārsus", opts:["ārdeō ārdēre ārsī ārsus","ārdeō ārdāre ārdāvī ārdātus","ārdeō ārdēre ārdī ārditus","fervō fervēre ferbuī —"] },
+  { q:"to fear / be afraid of", a:"tīmeō timēre timuī —", opts:["tīmeō timēre timuī —","tīmeō timāre timāvī timātus","tīmeō timēre timī timitus","metueō metuēre metuī —"] },
+  { q:"to frighten", a:"terreō terrēre terruī territus", opts:["terreō terrēre terruī territus","terreō terrāre terrāvī terrātus","terreō terrēre terrī terrītus","terrō terāre terruī territus"] },
+  { q:"to have / hold", a:"habeō habēre habuī habitus", opts:["habeō habēre habuī habitus","habeō habāre habāvī habātus","habeō habēre habī habitus","teneō tenēre tenuī tentus"] },
+  { q:"to hold", a:"teneō tenēre tenuī tentus", opts:["teneō tenēre tenuī tentus","teneō tenāre tenāvī tenātus","habeō habēre habuī habitus","teneō tenēre tenī tenitus"] },
+  { q:"to move", a:"mōveō movēre mōvī motus", opts:["mōveō movēre mōvī motus","mōveō movāre movāvī movātus","mōveō movēre movī movitus","moveō movēre movuī movitus"] },
+  { q:"to order / command", a:"jubeō jubēre jussī jussus", opts:["jubeō jubēre jussī jussus","jubeō jubāre jubāvī jubātus","jubeō jubēre jubī jubitus","imperō imperāre imperāvī imperātus"] },
+  { q:"to owe / ought", a:"debeō debēre debuī debitus", opts:["debeō debēre debuī debitus","debeō debāre debāvī debātus","debeō debēre debī debitus","oporteō oportēre opportuī —"] },
+  { q:"to prevent", a:"prohibeō prohibēre prohibuī prohibitus", opts:["prohibeō prohibēre prohibuī prohibitus","prohibeō prohibāre prohibāvī prohibātus","vetō vetāre vetuī vetitus","prohibeō prohibēre prohibī prohibitus"] },
+  { q:"to rejoice", a:"gaudeō gaudēre gāvīsus sum", opts:["gaudeō gaudēre gāvīsus sum","gaudeō gaudāre gauāvī gaudātus","laetor laetārī laetātus sum","gaudeō gaudēre gauduī —"] },
+  { q:"to remain / stay", a:"maneō manēre mānsī mānsus", opts:["maneō manēre mānsī mānsus","maneō manāre manāvī manātus","maneō manēre manī manitus","stō stāre stetī status"] },
+  { q:"to respond / answer", a:"respondeō respondēre respondī respōnsus", opts:["respondeō respondēre respondī respōnsus","respondeō respondāre respondāvī respondātus","respondeō respondēre responduī responditus","dicō dīcere dīxī dictus"] },
+  { q:"to see", a:"vīdeō vidēre vīdī vīsus", opts:["vīdeō vidēre vīdī vīsus","vīdeō vidāre vidāvī vidātus","vīdeō vidēre viduī viditus","spectō spectāre spectāvī spectātus"] },
+  { q:"to sit", a:"sedeō sedēre sēdī sessus", opts:["sedeō sedēre sēdī sessus","sedeō sedāre sedāvī sedātus","sedeō sedēre seduī seditus","sedeō sedēre sedī seditus"] },
+  { q:"to teach", a:"doceō docēre docuī doctus", opts:["doceō docēre docuī doctus","doceō docāre docāvī docātus","doceō docēre docī docitus","erudiō erudīre erudīvī erudītus"] },
+  { q:"to warn / advise", a:"moneō monēre monuī monitus", opts:["moneō monēre monuī monitus","moneō monāre monāvī monātus","moneō monēre monī monitus","hortor hortārī hortātus sum"] },
+  // Lesson 34 additions
+  { q:"to deny", a:"negō negāre negāvī negātus", opts:["negō negāre negāvī negātus","negō negēre neguī negitus","renueō renuēre renuī —","nolō nolle noluī —"] },
+  { q:"to give", a:"dō dare dedī datus", opts:["dō dare dedī datus","dō dāre dāvī dātus","donō donāre donāvī donātus","dō dere duī datus"] },
+  { q:"to overcome / surpass", a:"superō superāre superāvī superātus", opts:["superō superāre superāvī superātus","vincō vincere vīcī victus","superō superēre superuī superitus","excedō excedere excessī excessus"] },
+  { q:"to report", a:"nūntiō nūntiāre nūntiāvī nūntiātus", opts:["nūntiō nūntiāre nūntiāvī nūntiātus","reportō reportāre reportāvī reportātus","nūntiō nūntiēre nūntivī nūntitus","referō referre rettulī relātus"] },
+  { q:"to seize", a:"rapiō rapere rapuī raptus", opts:["rapiō rapere rapuī raptus","capiō capere cēpī captus","rapiō rapāre rapāvī rapātus","arripiō arripere arripuī arreptus"] },
+  { q:"to think", a:"putō putāre putāvī putātus", opts:["putō putāre putāvī putātus","cōgitō cōgitāre cōgitāvī cōgitātus","putō putēre putuī putitus","arbitror arbitrārī arbitrātus sum"] },
+  { q:"to wait for / expect", a:"exspectō exspectāre exspectāvī exspectātus", opts:["exspectō exspectāre exspectāvī exspectātus","exspectō exspectēre exspectuī exspectitus","manēō manēre mānsī mānsus","opperiō opperīre opperuī —"] },
+  { q:"to judge", a:"jūdicō jūdicāre jūdicāvī jūdicātus", opts:["jūdicō jūdicāre jūdicāvī jūdicātus","jūdicō jūdicēre jūdicuī jūdicitus","aestimō aestimāre aestimāvī aestimātus","arbitror arbitrārī arbitrātus sum"] },
+];
+
+const sayingsQuestions = [
+  { q:"Translate: 'Cave canem.'", a:"Beware of the dog.", opts:["Beware of the dog.","Beware of the cat.","The dog is in a cave.","Guard the dog."] },
+  { q:"Translate: 'Docēre, delectāre, movēre.'", a:"To teach, to delight, to move (the emotions).", opts:["To teach, to delight, to move (the emotions).","Teaching, delighting, moving.","He teaches, delights, and moves.","Teach, delight, and be moved."] },
+  { q:"Who said 'Veni, vidi, vici'?", a:"Julius Caesar", opts:["Julius Caesar","Cicero","Augustus","Pompey"] },
+  { q:"Translate: 'Videō et tāceō.'", a:"I see and am silent.", opts:["I see and am silent.","I see and I speak.","She sees and is silent.","We see and are silent."] },
+  { q:"Who said 'Videō et tāceō'?", a:"Queen Elizabeth I", opts:["Queen Elizabeth I","Julius Caesar","Cicero","Virgil"] },
+  { q:"Translate: 'In umbrā, igitur, pugnābimus.'", a:"Then we will fight in the shade.", opts:["Then we will fight in the shade.","In the shadow, therefore, we fought.","We fight in the shade always.","Therefore fight in the darkness."] },
+  { q:"'nunc aut numquam' means:", a:"now or never", opts:["now or never","now or always","never and now","not now, never"] },
+  { q:"'semper fidēlis' is the motto of:", a:"the U.S. Marines", opts:["the U.S. Marines","the U.S. Army","the U.S. Navy","the Roman legions"] },
+  { q:"'Semper fidēlis' translates as:", a:"always faithful", opts:["always faithful","always strong","always first","always victorious"] },
+  { q:"What tense is 'pugnābimus' in 'In umbrā, igitur, pugnābimus'?", a:"Future", opts:["Future","Present","Imperfect","Perfect"] },
+];
+
+const grammar3Questions = [
+  { q:"How many attributes does a Latin verb have?", a:"Six", opts:["Six","Four","Five","Three"] },
+  { q:"The six attributes of a Latin verb are:", a:"person, number, tense, mood, voice, conjugation", opts:["person, number, tense, mood, voice, conjugation","person, number, tense, gender, case, declension","stem, ending, tense, mood, person, number","conjugation, declension, case, tense, mood, voice"] },
+  { q:"The stem vowel of the 2nd conjugation is:", a:"ē (long e)", opts:["ē (long e)","ā (long a)","ī (long i)","ō (long o)"] },
+  { q:"The infinitive ending for ALL 2nd conjugation verbs is:", a:"-ēre", opts:["-ēre","-āre","-ere","-īre"] },
+  { q:"The regular principal parts pattern for 2nd conjugation verbs is:", a:"-eō, -ēre, -uī, -itus", opts:["-eō, -ēre, -uī, -itus","-ō, -āre, -āvī, -ātus","-ō, -ere, -ī, -us","-eō, -ēre, -ī, -ītus"] },
+  { q:"The three tenses of the PRESENT system are:", a:"present, imperfect, future", opts:["present, imperfect, future","present, perfect, future","imperfect, perfect, pluperfect","present, future, future perfect"] },
+  { q:"The three tenses of the PERFECT system are:", a:"perfect, pluperfect, future perfect", opts:["perfect, pluperfect, future perfect","present, perfect, pluperfect","perfect, future, future perfect","imperfect, perfect, pluperfect"] },
+  { q:"In Latin grammar, 'perfect' means:", a:"finished / completed", opts:["finished / completed","in progress / ongoing","about to happen","repeated in the past"] },
+  { q:"In Latin grammar, 'imperfect' means:", a:"unfinished / in progress", opts:["unfinished / in progress","finished completely","never completed","about to begin"] },
+  { q:"The present stem of a 2nd conjugation verb is found by:", a:"taking the 2nd principal part and removing -re", opts:["taking the 2nd principal part and removing -re","taking the 1st principal part and removing -ō","taking the 3rd principal part and removing -ī","taking the 4th principal part and removing -us"] },
+  { q:"The perfect stem is found from the:", a:"3rd principal part minus -ī", opts:["3rd principal part minus -ī","2nd principal part minus -re","1st principal part minus -ō","4th principal part minus -us"] },
+  { q:"Which of the following is NOT one of the six verb attributes?", a:"Gender", opts:["Gender","Mood","Voice","Tense"] },
+];
+
+const verbFormsQuestions = [
+  { q:"Give the 1st person singular PRESENT of habeō.", a:"habeō", opts:["habeō","habēs","habet","habēbam"] },
+  { q:"Give the 1st person singular IMPERFECT of habeō.", a:"habēbam", opts:["habēbam","habeō","habēbō","habuī"] },
+  { q:"Give the 1st person singular FUTURE of habeō.", a:"habēbō", opts:["habēbō","habēbam","habeō","habuerō"] },
+  { q:"Give the 1st person singular PERFECT of habeō.", a:"habuī", opts:["habuī","habuerō","habueram","habēbam"] },
+  { q:"Give the 1st person singular PLUPERFECT of habeō.", a:"habueram", opts:["habueram","habuī","habuerō","habēbam"] },
+  { q:"Give the 1st person singular FUTURE PERFECT of habeō.", a:"habuerō", opts:["habuerō","habuī","habueram","habēbō"] },
+  { q:"Give the 1st person singular PRESENT of mōveō.", a:"mōveō", opts:["mōveō","movēs","movet","movēbam"] },
+  { q:"Give the 1st person singular IMPERFECT of mōveō.", a:"movēbam", opts:["movēbam","mōveō","movēbō","mōvī"] },
+  { q:"Give the 1st person singular FUTURE of mōveō.", a:"movēbō", opts:["movēbō","movēbam","mōveō","mōverō"] },
+  { q:"Give the 1st person singular PERFECT of mōveō.", a:"mōvī", opts:["mōvī","movēbam","mōveram","mōverō"] },
+  { q:"Give the 3rd person plural PRESENT of tāceō.", a:"tacent", opts:["tacent","tacēs","tacet","tacēbant"] },
+  { q:"Give the 2nd person plural IMPERFECT of tīmeō.", a:"timēbātis", opts:["timēbātis","timētis","timēbitis","timuistis"] },
+  { q:"Give the 3rd person singular FUTURE of gaudeō.", a:"gaudēbit", opts:["gaudēbit","gaudet","gaudēbat","gāvīsus erit"] },
+  { q:"Give the 1st person plural PERFECT of sedeō.", a:"sēdimus", opts:["sēdimus","sedēmus","sedēbāmus","sēderāmus"] },
+];
+
+const parsing3Questions = [
+  // Directly from Lesson 33 Form Drills
+  { q:"Parse: 'jússerit' — conjugation, person, number, tense", a:"2nd conj., 3rd S, future perfect", opts:["2nd conj., 3rd S, future perfect","2nd conj., 3rd S, perfect","2nd conj., 3rd P, future perfect","1st conj., 3rd S, future perfect"] },
+  { q:"Parse: 'manetis' — conjugation, person, number, tense", a:"2nd conj., 2nd P, present", opts:["2nd conj., 2nd P, present","2nd conj., 2nd P, imperfect","2nd conj., 2nd S, present","1st conj., 2nd P, present"] },
+  { q:"'I had moved' in Latin is:", a:"mōveram", opts:["mōveram","mōvī","movēbam","mōverō"] },
+  { q:"'We will rejoice' in Latin is:", a:"gaudēbimus", opts:["gaudēbimus","gaudēbāmus","gaudēmus","gāvīsī erimus"] },
+  // From Lesson 34 Form Drills
+  { q:"Parse: 'culpābit' — conjugation, person, number, tense", a:"1st conj., 3rd S, future", opts:["1st conj., 3rd S, future","1st conj., 3rd S, imperfect","1st conj., 3rd S, perfect","2nd conj., 3rd S, future"] },
+  { q:"Parse: 'fuistis' — person, number, tense", a:"2nd P, perfect of sum", opts:["2nd P, perfect of sum","2nd P, imperfect of sum","2nd S, perfect of sum","3rd P, perfect of sum"] },
+  { q:"'You (singular) call' in Latin is:", a:"appellās", opts:["appellās","appellat","appellō","appellātis"] },
+  { q:"'He does beware of' in Latin is:", a:"cavet", opts:["cavet","cavēbat","caveō","cavēbit"] },
+  // Translation sentences from Lesson 34
+  { q:"'Bella nova spiritum delectaverunt' means:", a:"The new war delighted the spirit.", opts:["The new war delighted the spirit.","Beautiful new spirits delighted.","The new beauty delighted the spirit.","New spirits were delighted by war."] },
+  { q:"'Dominum Sanctum voces aeternae laudabant' means:", a:"Eternal voices were praising the Holy Lord.", opts:["Eternal voices were praising the Holy Lord.","The Holy Lord praised eternal voices.","The eternal Holy Lord praised voices.","Eternal voices will praise the Holy Lord."] },
+  { q:"'Alta fides timores non prohibet' means:", a:"A deep faith does not prevent fears.", opts:["A deep faith does not prevent fears.","Deep faith never prevented fear.","Faith does not fear the deep.","High faith will not prevent fears."] },
+  { q:"What case is 'spiritum' in 'Bella nova spiritum delectaverunt'?", a:"Accusative (direct object)", opts:["Accusative (direct object)","Nominative (subject)","Dative (indirect object)","Genitive (possession)"] },
+];
+
+const flashcards3 = [
+  { lat:"habeō habēre habuī habitus", hint:"verb · 2nd conj.", eng:"to have, hold" },
+  { lat:"mōveō movēre mōvī motus", hint:"verb · 2nd conj.", eng:"to move" },
+  { lat:"tāceō tacēre tacuī tacitus", hint:"verb · 2nd conj.", eng:"to be silent" },
+  { lat:"tīmeō timēre timuī —", hint:"verb · 2nd conj.", eng:"to fear, be afraid of" },
+  { lat:"terreō terrēre terruī territus", hint:"verb · 2nd conj.", eng:"to frighten" },
+  { lat:"caveō cavēre cāvī cautus", hint:"verb · 2nd conj.", eng:"to beware of, guard against" },
+  { lat:"ārdeō ārdēre ārsī ārsus", hint:"verb · 2nd conj.", eng:"to burn, be on fire" },
+  { lat:"gaudeō gaudēre gāvīsus sum", hint:"verb · 2nd conj.", eng:"to rejoice" },
+  { lat:"sedeō sedēre sēdī sessus", hint:"verb · 2nd conj.", eng:"to sit" },
+  { lat:"appāreō appārēre appāruī appāritus", hint:"verb · 2nd conj.", eng:"to appear" },
+  { lat:"debeō debēre debuī debitus", hint:"verb · 2nd conj.", eng:"to owe, ought" },
+  { lat:"prohibeō prohibēre prohibuī prohibitus", hint:"verb · 2nd conj.", eng:"to prevent" },
+  { lat:"respondeō respondēre respondī respōnsus", hint:"verb · 2nd conj.", eng:"to respond, answer" },
+  { lat:"valeō valēre valuī —", hint:"verb · 2nd conj.", eng:"to be strong, be well" },
+  { lat:"maneō manēre mānsī mānsus", hint:"verb · 2nd conj.", eng:"to remain, stay" },
+  { lat:"jubeō jubēre jussī jussus", hint:"verb · 2nd conj.", eng:"to order, command" },
+  { lat:"doceō docēre docuī doctus", hint:"verb · 2nd conj.", eng:"to teach" },
+  { lat:"moneō monēre monuī monitus", hint:"verb · 2nd conj.", eng:"to warn, advise" },
+  { lat:"vīdeō vidēre vīdī vīsus", hint:"verb · 2nd conj.", eng:"to see" },
+  { lat:"teneō tenēre tenuī tentus", hint:"verb · 2nd conj.", eng:"to hold" },
+  { lat:"negō negāre negāvī negātus", hint:"verb · 1st conj.", eng:"to deny" },
+  { lat:"dō dare dedī datus", hint:"verb · irreg. 1st conj.", eng:"to give" },
+  { lat:"superō superāre superāvī superātus", hint:"verb · 1st conj.", eng:"to overcome, surpass" },
+  { lat:"nūntiō nūntiāre nūntiāvī nūntiātus", hint:"verb · 1st conj.", eng:"to report" },
+  { lat:"rapiō rapere rapuī raptus", hint:"verb · 3rd conj.", eng:"to seize" },
+  { lat:"putō putāre putāvī putātus", hint:"verb · 1st conj.", eng:"to think" },
+  { lat:"exspectō exspectāre exspectāvī exspectātus", hint:"verb · 1st conj.", eng:"to wait for, expect" },
+  { lat:"Cave canem.", hint:"Latin saying", eng:"Beware of the dog." },
+  { lat:"Videō et tāceō.", hint:"Latin saying — Queen Elizabeth I", eng:"I see and am silent." },
+  { lat:"Docēre, delectāre, movēre.", hint:"Latin saying — Cicero", eng:"To teach, to delight, to move." },
+  { lat:"semper fidēlis", hint:"Latin saying — U.S. Marines", eng:"always faithful" },
+  { lat:"nunc aut numquam", hint:"Latin expression", eng:"now or never" },
+  { lat:"In umbrā, igitur, pugnābimus.", hint:"Latin saying — Spartan warrior", eng:"Then we will fight in the shade." },
+  { lat:"fides -eī", hint:"noun · 5th decl. f.", eng:"faith, trust" },
+  { lat:"timor timōris", hint:"noun · 3rd decl. m.", eng:"fear" },
+];
+
+const final3Questions = [
+  { q:"What are ALL the principal parts of 'habeō'?", a:"habeō habēre habuī habitus", opts:["habeō habēre habuī habitus","habeō habāre habāvī habātus","habeō habēre habī habitus","habeō habēre habebī habitus"] },
+  { q:"What are ALL the principal parts of 'tāceō'?", a:"tāceō tacēre tacuī tacitus", opts:["tāceō tacēre tacuī tacitus","tāceō tacāre tacāvī tacātus","tāceō tacēre tacī tacitus","tāceō tacēre tacuī tacītus"] },
+  { q:"The stem vowel of the 2nd conjugation is:", a:"ē", opts:["ē","ā","ī","ō"] },
+  { q:"'Cave canem' translates as:", a:"Beware of the dog.", opts:["Beware of the dog.","Beware of the cave.","Guard the dog.","The dog is in a cave."] },
+  { q:"'Videō et tāceō' was said by:", a:"Queen Elizabeth I", opts:["Queen Elizabeth I","Julius Caesar","Cicero","Augustus"] },
+  { q:"'In umbrā, igitur, pugnābimus' means:", a:"Then we will fight in the shade.", opts:["Then we will fight in the shade.","In the shadow we fought.","We always fight in the shade.","Therefore fight in darkness."] },
+  { q:"What is the 1st person singular perfect of 'mōveō'?", a:"mōvī", opts:["mōvī","mōveram","movēbam","mōverō"] },
+  { q:"What is the 1st person singular pluperfect of 'habeō'?", a:"habueram", opts:["habueram","habuī","habuerō","habēbam"] },
+  { q:"Parse 'jússerit': tense?", a:"Future perfect", opts:["Future perfect","Perfect","Pluperfect","Future"] },
+  { q:"Parse 'culpābit': tense?", a:"Future", opts:["Future","Imperfect","Perfect","Present"] },
+  { q:"'Fuistis' is the 2nd person plural ___ of sum.", a:"perfect", opts:["perfect","imperfect","pluperfect","present"] },
+  { q:"'Alta fides timores non prohibet' — what case is 'timores'?", a:"Accusative plural (direct object)", opts:["Accusative plural (direct object)","Nominative plural (subject)","Genitive plural","Dative plural"] },
+  { q:"'Bella nova spiritum delectaverunt' — what tense is 'delectaverunt'?", a:"Perfect", opts:["Perfect","Imperfect","Pluperfect","Future"] },
+  { q:"The three tenses of the perfect system are:", a:"perfect, pluperfect, future perfect", opts:["perfect, pluperfect, future perfect","present, perfect, future","imperfect, perfect, pluperfect","perfect, future, future perfect"] },
+  { q:"'semper fidēlis' means:", a:"always faithful", opts:["always faithful","always strong","always free","always victorious"] },
+];
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+const state3 = {
+  vocabA:     { questions: shuffle([...vocabAQuestions]),     answered: 0, correct: 0 },
+  sayings:    { questions: shuffle([...sayingsQuestions]),    answered: 0, correct: 0 },
+  grammar3:   { questions: shuffle([...grammar3Questions]),   answered: 0, correct: 0 },
+  verbForms:  { questions: shuffle([...verbFormsQuestions]),  answered: 0, correct: 0 },
+  parsing3:   { questions: shuffle([...parsing3Questions]),   answered: 0, correct: 0 },
+  final3:     { questions: shuffle([...final3Questions]),     answered: 0, correct: 0 },
+};
+
+let card3Index = 0;
+let card3Order = [...flashcards3.keys()];
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const idx = ['vocabA','sayings','grammar3','verbForms','parsing3','flashcards3','final3'].indexOf(id);
+  document.querySelectorAll('nav button')[idx].classList.add('active');
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = Object.values(state3).reduce((s,v) => s + v.questions.length, 0);
+  const answered = Object.values(state3).reduce((s,v) => s + v.answered, 0);
+  const pct = total ? (answered / total * 100).toFixed(0) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = answered + ' / ' + total + ' answered';
+}
+
+function buildQuiz(containerId, questions, stateKey, scoreBannerId, scoreTextId, scoreMsgId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  questions.forEach((q, i) => {
+    const opts = shuffle([...q.opts]);
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.id = stateKey + '-q-' + i;
+    card.innerHTML = `
+      <div class="q-num">QUESTION ${i+1} OF ${questions.length}</div>
+      <div class="question">${q.q}</div>
+      <div class="options">
+        ${opts.map(o => `<button class="opt-btn" onclick="checkAnswer3(this,'${stateKey}',${i},'${q.a.replace(/'/g,"\\'")}','${scoreBannerId}','${scoreTextId}','${scoreMsgId}')">${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="${stateKey}-fb-${i}"></div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function checkAnswer3(btn, stateKey, qIdx, correct, bannerId, scoreTextId, scoreMsgId) {
+  const card = document.getElementById(stateKey + '-q-' + qIdx);
+  if (card.dataset.answered) return;
+  card.dataset.answered = '1';
+  const chosen = btn.textContent;
+  const fb = document.getElementById(stateKey + '-fb-' + qIdx);
+  const allBtns = card.querySelectorAll('.opt-btn');
+  allBtns.forEach(b => { b.disabled = true; if (b.textContent === correct) b.classList.add('correct'); });
+  const s = state3[stateKey];
+  s.answered++;
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✓ Optime! Correct!';
+    fb.className = 'feedback correct-fb';
+    s.correct++;
+  } else {
+    btn.classList.add('wrong');
+    fb.innerHTML = `✗ Not quite. The correct answer is: <strong>${correct}</strong>`;
+    fb.className = 'feedback wrong-fb';
+  }
+  const allCards = document.querySelectorAll('[id^="' + stateKey + '-q-"]');
+  if ([...allCards].every(c => c.dataset.answered)) {
+    showScore3(bannerId, scoreTextId, scoreMsgId, s.correct, s.questions.length);
+  }
+  updateProgress();
+}
+
+function showScore3(bannerId, scoreTextId, scoreMsgId, correct, total) {
+  const pct = Math.round(correct / total * 100);
+  document.getElementById(scoreTextId).textContent = correct + ' / ' + total;
+  let msg;
+  if (pct >= 90) msg = '🏆 Optime! Excellent work!';
+  else if (pct >= 75) msg = '👍 Bene! Good effort!';
+  else if (pct >= 60) msg = '📖 Keep reviewing — you\'re getting there!';
+  else msg = '💪 Repetitio est māter studiōrum — keep practicing!';
+  document.getElementById(scoreMsgId).textContent = msg + ' (' + pct + '%)';
+  const banner = document.getElementById(bannerId);
+  banner.classList.add('visible');
+  banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetSection(section) {
+  const map = {
+    vocabA:    [vocabAQuestions,    'vocabA',    'vocabA-score-banner',    'vocabA-score-text',    'vocabA-score-msg'],
+    sayings:   [sayingsQuestions,   'sayings',   'sayings-score-banner',   'sayings-score-text',   'sayings-score-msg'],
+    grammar3:  [grammar3Questions,  'grammar3',  'grammar3-score-banner',  'grammar3-score-text',  'grammar3-score-msg'],
+    verbForms: [verbFormsQuestions, 'verbForms', 'verbForms-score-banner', 'verbForms-score-text', 'verbForms-score-msg'],
+    parsing3:  [parsing3Questions,  'parsing3',  'parsing3-score-banner',  'parsing3-score-text',  'parsing3-score-msg'],
+    final3:    [final3Questions,    'final3',    'final3-score-banner',    'final3-score-text',    'final3-score-msg'],
+  };
+  if (!map[section]) return;
+  const [src, key, bid, btxt, bmsg] = map[section];
+  state3[key] = { questions: shuffle([...src]), answered: 0, correct: 0 };
+  buildQuiz(key + '-quiz-container', state3[key].questions, key, bid, btxt, bmsg);
+  document.getElementById(bid).classList.remove('visible');
+  updateProgress();
+}
+
+// Flashcards
+function renderCard3() {
+  const card = flashcards3[card3Order[card3Index]];
+  document.getElementById('card3-front-text').textContent = card.lat;
+  document.getElementById('card3-hint-text').textContent = card.hint;
+  document.getElementById('card3-back-text').textContent = card.eng;
+  document.getElementById('card3-counter').textContent = (card3Index + 1) + ' / ' + card3Order.length;
+  document.getElementById('flashcard3').classList.remove('flipped');
+}
+function flipCard3() { document.getElementById('flashcard3').classList.toggle('flipped'); }
+function nextCard3() { card3Index = (card3Index + 1) % flashcards3.length; renderCard3(); }
+function prevCard3() { card3Index = (card3Index - 1 + flashcards3.length) % flashcards3.length; renderCard3(); }
+function shuffleCards3() { shuffle(card3Order); card3Index = 0; renderCard3(); }
+
+// INIT
+buildQuiz('vocabA-quiz-container',    state3.vocabA.questions,    'vocabA',    'vocabA-score-banner',    'vocabA-score-text',    'vocabA-score-msg');
+buildQuiz('sayings-quiz-container',   state3.sayings.questions,   'sayings',   'sayings-score-banner',   'sayings-score-text',   'sayings-score-msg');
+buildQuiz('grammar3-quiz-container',  state3.grammar3.questions,  'grammar3',  'grammar3-score-banner',  'grammar3-score-text',  'grammar3-score-msg');
+buildQuiz('verbForms-quiz-container', state3.verbForms.questions, 'verbForms', 'verbForms-score-banner', 'verbForms-score-text', 'verbForms-score-msg');
+buildQuiz('parsing3-quiz-container',  state3.parsing3.questions,  'parsing3',  'parsing3-score-banner',  'parsing3-score-text',  'parsing3-score-msg');
+buildQuiz('final3-quiz-container',    state3.final3.questions,    'final3',    'final3-score-banner',    'final3-score-text',    'final3-score-msg');
+renderCard3();
+updateProgress();
+</script>
+</body>
+</html>
